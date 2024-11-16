@@ -1,9 +1,11 @@
+const OpenAI = require("openai");
 const ReadingHistoryService = require("../../reading-history/service/reading-history");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const BookService = require("../../books/services/books");
 
-// const API_KEY = process.env.OPEN_AI_API_KEY;
+// const API_KEY = process.env.OPENAI_API_KEY;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const API_KEY = process.env.OPENAI_API_KEY;
 
 class RecommendationService {
   constructor() {
@@ -15,10 +17,6 @@ class RecommendationService {
     try {
       const userPreferences =
         await this.readingHistoryService.getReadingHistory(userId);
-      console.log(
-        "🚀 ~ RecommendationService ~ getRecommendation ~ userPreferences:",
-        userPreferences
-      );
 
       const books = await this.bookService.getAllBooks();
 
@@ -46,22 +44,18 @@ class RecommendationService {
       const text = result.response.text();
 
       const cleanedString = text.replace(/```json|```/g, "");
+
       return JSON.parse(cleanedString);
 
-      // const recommendation = await axios.post(
-      //     "https://api.openai.com/v1/chat/completions",
-      //     {
-      //       model: "gpt-3.5-turbo", // or gpt-3.5-turbo if you prefer
-      //       messages: [{ role: "user", content: prompt }],
-      //       max_tokens: 500,
-      //     },
-      //     {
-      //       headers: {
-      //         Authorization: `Bearer ${API_KEY}`,
-      //         "Content-Type": "application/json",
-      //       },
-      //     }
-      //   );
+      // const openai = new OpenAI({ api: API_KEY });
+      // const completion = await openai.chat.completions.create({
+      //   model: "gpt-3.5-turbo",
+      //   messages: [{ role: "user", content: prompt }],
+      // });
+      // console.log(
+      //   "🚀 ~ RecommendationService ~ getRecommendation ~ completion:",
+      //   completion
+      // );
     } catch (error) {
       console.log(
         "🚀 ~ RecommendationService ~ getRecommendation ~ error:",
